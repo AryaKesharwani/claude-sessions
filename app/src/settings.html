@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en" data-theme="system">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Settings</title>
+  <link rel="stylesheet" href="theme.css" />
+  <link rel="stylesheet" href="settings.css" />
+</head>
+<body>
+  <header class="bar" data-tauri-drag-region>
+    <nav class="tabs" role="tablist">
+      <button role="tab" data-tab="general" aria-selected="true">General</button>
+      <button role="tab" data-tab="appearance">Appearance</button>
+      <button role="tab" data-tab="menubar">Menu Bar</button>
+      <button role="tab" data-tab="list">List</button>
+    </nav>
+  </header>
+
+  <main>
+    <section data-panel="general">
+      <div class="group">
+        <div class="field">
+          <div><label for="terminal">Open sessions in</label><p class="hint">Each session opens in its own new window.</p></div>
+          <select id="terminal" data-key="terminal">
+            <option value="terminal">Terminal</option>
+            <option value="iterm">iTerm2</option>
+            <option value="ghostty">Ghostty</option>
+          </select>
+        </div>
+        <div class="field">
+          <div><label for="tile_after_open">Tile windows after opening</label><p class="hint">Arrange all terminal windows in a grid each time a session opens.</p></div>
+          <input type="checkbox" class="switch" id="tile_after_open" data-key="tile_after_open" />
+        </div>
+        <div class="field">
+          <div><label for="claude_args">Extra Claude arguments</label><p class="hint">Added to every <code>claude --resume</code>, e.g. <code>--model opus</code>.</p></div>
+          <input type="text" id="claude_args" data-key="claude_args" placeholder="none" spellcheck="false" autocomplete="off" />
+        </div>
+      </div>
+      <div class="group">
+        <div class="field">
+          <div><label for="keep_in_menu_bar">Keep running in the menu bar</label><p class="hint">Closing the window hides it instead of quitting.</p></div>
+          <input type="checkbox" class="switch" id="keep_in_menu_bar" data-key="keep_in_menu_bar" />
+        </div>
+      </div>
+    </section>
+
+    <section data-panel="appearance" hidden>
+      <h2>Theme</h2>
+      <div id="themes" class="themes"></div>
+      <h2>Accent</h2>
+      <div id="accents" class="accents"></div>
+      <div class="group">
+        <div class="field">
+          <label>Text size</label>
+          <div class="seg" data-key="text_size">
+            <button value="small">Small</button><button value="medium">Medium</button><button value="large">Large</button>
+          </div>
+        </div>
+        <div class="field">
+          <label>Density</label>
+          <div class="seg" data-key="density">
+            <button value="compact">Compact</button><button value="comfortable">Comfortable</button><button value="spacious">Spacious</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section data-panel="menubar" hidden>
+      <div class="group">
+        <div class="field">
+          <div><label for="show_tray">Show in menu bar</label><p class="hint">Click the icon to open a recent session.</p></div>
+          <input type="checkbox" class="switch" id="show_tray" data-key="show_tray" />
+        </div>
+        <div class="field">
+          <label for="tray_count">Recent sessions in menu</label>
+          <select id="tray_count" data-key="tray_count" data-type="number">
+            <option value="5">5</option><option value="10">10</option><option value="15">15</option><option value="20">20</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <section data-panel="list" hidden>
+      <div class="group">
+        <div class="field">
+          <div><label for="description">Second line shows</label><p class="hint">AI summaries come from <code>cs summary</code>.</p></div>
+          <select id="description" data-key="description">
+            <option value="latest">Latest message</option>
+            <option value="first">First message</option>
+            <option value="summary">AI summary</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="show_time">Show time</label>
+          <input type="checkbox" class="switch" id="show_time" data-key="show_time" />
+        </div>
+        <div class="field">
+          <div><label for="show_archived">Show archived sessions</label><p class="hint">Sessions Claude Code cleaned up but <code>cs backup</code> saved.</p></div>
+          <input type="checkbox" class="switch" id="show_archived" data-key="show_archived" />
+        </div>
+        <div class="field">
+          <label for="max_age_days">Show sessions from</label>
+          <select id="max_age_days" data-key="max_age_days" data-type="number">
+            <option value="0">All time</option>
+            <option value="1">Today</option>
+            <option value="7">Last 7 days</option>
+            <option value="30">Last 30 days</option>
+            <option value="90">Last 90 days</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <button id="reset" class="link">Restore defaults</button>
+      <span id="saved" class="saved" aria-live="polite"></span>
+    </footer>
+  </main>
+
+  <script src="theme.js"></script>
+  <script src="settings.js"></script>
+</body>
+</html>

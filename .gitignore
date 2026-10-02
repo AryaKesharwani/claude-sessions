@@ -1,0 +1,8 @@
+node_modules/
+app/src-tauri/target/
+app/src-tauri/gen/
+website/dist/
+.wrangler/
+.DS_Store
+__pycache__/
+*.pyc

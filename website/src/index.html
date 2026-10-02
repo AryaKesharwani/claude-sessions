@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Claude Sessions: find and reopen every Claude Code session</title>
+  <meta name="description" content="A free, open-source macOS menu bar app and CLI that lists every Claude Code session from every folder, newest first, and reopens any of them in a new terminal window with one click." />
+  <meta property="og:title" content="Claude Sessions" />
+  <meta property="og:description" content="Every Claude Code session from every folder, newest first. Click one and it reopens in a new terminal window." />
+  <meta property="og:image" content="https://sessions.aryakesarwani.tech/og.png" />
+  <meta property="og:url" content="https://sessions.aryakesarwani.tech/" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="icon.png" />
+  <link rel="stylesheet" href="site.css" />
+</head>
+<body>
+  <header class="nav">
+    <a class="brand" href="#top"><img src="icon.png" alt="" width="26" height="26" /> Claude Sessions</a>
+    <nav>
+      <a href="#demo">Demo</a>
+      <a href="#why">Why</a>
+      <a href="#features">Features</a>
+      <a href="#install">Install</a>
+      <a href="#cli">CLI</a>
+      <a href="#faq">FAQ</a>
+      <a class="gh" href="https://github.com/AryaKesharwani/claude-sessions">GitHub</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <p class="eyebrow">Free · open source · macOS</p>
+      <h1>Every Claude Code session.<br />One click to get back in.</h1>
+      <p class="lede">
+        Claude Sessions lists every Claude Code session you've ever started, from every folder, newest first.
+        Click one and it opens in a new terminal window, in the right folder, with the whole conversation back.
+        No more digging for which directory you were in.
+      </p>
+      <div class="cta">
+        <a class="btn primary" href="https://github.com/AryaKesharwani/claude-sessions/releases/latest/download/Claude-Sessions-macOS-arm64.zip">Download for Mac (Apple Silicon)</a>
+        <a class="btn" href="https://github.com/AryaKesharwani/claude-sessions">View source on GitHub</a>
+      </div>
+      <p class="small">Version 0.1.0 · 6 MB · MIT licence · runs entirely on your Mac. Also ships as a one-file CLI, <code>cs</code>.</p>
+    </section>
+
+    <section id="demo" class="demo">
+      <div class="demo-head">
+        <h2>Try it right here</h2>
+        <p>This is the real app interface running in your browser on made-up sessions. Click a session to see what it would run, or change the theme in Settings and watch the list follow.</p>
+      </div>
+      <div class="desk">
+        <figure class="win main-win">
+          <iframe src="demo/index.html" title="Claude Sessions main window demo" loading="lazy"></iframe>
+        </figure>
+        <figure class="win settings-win" id="settings-win">
+          <iframe src="demo/settings.html" title="Claude Sessions settings demo" loading="lazy"></iframe>
+        </figure>
+        <figure class="term" aria-live="polite">
+          <div class="term-bar"><span></span><span></span><span></span><b id="term-title">Terminal</b></div>
+          <pre id="term"><span class="dim">Click a session in the list.
+A new Terminal window like this one opens and runs:</span>
+
+<span class="p">$</span> cd ~/code/project &amp;&amp; claude --resume &lt;session-id&gt;</pre>
+        </figure>
+      </div>
+    </section>
+
+    <section id="why" class="prose">
+      <h2>Why I built it</h2>
+      <p>
+        I run a lot of Claude Code sessions at once: a bug fix in one repo, a refactor in another, a quick question in my home folder.
+        Then I close the terminal, and the next day I can't find any of them.
+      </p>
+      <p>The sessions aren't actually gone. I dug in and found three things:</p>
+      <ol class="facts">
+        <li>
+          <strong>Every session is saved.</strong> Claude Code writes each one to
+          <code>~/.claude/projects/&lt;folder-name&gt;/&lt;session-id&gt;.jsonl</code>, including the folder it ran in and an auto-generated title.
+        </li>
+        <li>
+          <strong><code>claude --resume</code> only shows the current folder.</strong> If you don't remember where you started a session,
+          you have to <code>cd</code> into folders one by one until it shows up.
+        </li>
+        <li>
+          <strong>Old sessions are deleted.</strong> By default Claude Code removes sessions after 30 days (the <code>cleanupPeriodDays</code> setting).
+        </li>
+      </ol>
+      <p>
+        So I wrote a small CLI that reads all of those files at once, and then wrapped it in a menu bar app so that getting back into
+        a session is one click: newest at the top, oldest at the bottom, no folders to think about.
+      </p>
+    </section>
+
+    <section id="how" class="how">
+      <h2>How it works</h2>
+      <ol class="steps">
+        <li>
+          <span class="n">1</span>
+          <h3>Read</h3>
+          <p>Scans every <code>*.jsonl</code> file under <code>~/.claude/projects</code>, plus its own backup archive.</p>
+        </li>
+        <li>
+          <span class="n">2</span>
+          <h3>Index</h3>
+          <p>Pulls out the title, the folder the session ran in, git branch, first and latest message, and last activity. Results are cached by file size and modified time, so a refresh takes about 30 ms.</p>
+        </li>
+        <li>
+          <span class="n">3</span>
+          <h3>Reopen</h3>
+          <p>When you click, it opens a new terminal window and runs <code>cd &lt;that folder&gt; &amp;&amp; claude --resume &lt;id&gt;</code>. Claude Code loads the full conversation back.</p>
+        </li>
+      </ol>
+      <p class="note">It only reads session files. It never edits them, and nothing leaves your Mac unless you ask for an AI summary (see the FAQ).</p>
+    </section>
+
+    <section id="features" class="features">
+      <h2>What it does</h2>
+      <div class="grid">
+        <article><h3>Newest first, every folder</h3><p>One timeline grouped by Today, Yesterday and earlier dates. You never pick a folder: each session remembers where it ran.</p></article>
+        <article><h3>One click, new window</h3><p>Each session opens in its own terminal window, titled with the session name so you can tell them apart.</p></article>
+        <article><h3>Menu bar dropdown</h3><p>Your 5 to 20 most recent sessions are always one click away in the macOS menu bar, even with the main window closed.</p></article>
+        <article><h3>Side by side</h3><p>Tile every open terminal window into a neat grid on your screen, on demand or automatically after each open.</p></article>
+        <article><h3>Search</h3><p>Filter by title, message text or folder as you type. Press Enter to open the top match.</p></article>
+        <article><h3>Themes</h3><p>System, Light, Dark, Paper, Solarized, Midnight, Nord and Rosé, plus accent colours, three text sizes and three densities.</p></article>
+        <article><h3>Keeps sessions past 30 days</h3><p><code>cs backup</code> copies session files to an archive so Claude Code's cleanup can't delete them. Archived sessions are restored automatically when you open them.</p></article>
+        <article><h3>Optional AI recaps</h3><p><code>cs summary</code> asks Claude Haiku for a 2–3 sentence recap of what a session did, cached locally.</p></article>
+        <article><h3>Your terminal, your flags</h3><p>Terminal, iTerm2 or Ghostty. Add extra arguments such as <code>--model opus</code> to every resume.</p></article>
+      </div>
+    </section>
+
+    <section id="install" class="install">
+      <h2>Install</h2>
+
+      <div class="card">
+        <h3>The app (Apple Silicon Mac)</h3>
+        <ol>
+          <li>Download <a href="https://github.com/AryaKesharwani/claude-sessions/releases/latest/download/Claude-Sessions-macOS-arm64.zip">Claude-Sessions-macOS-arm64.zip</a> and unzip it.</li>
+          <li>Move <b>Claude Sessions.app</b> to your Applications folder.</li>
+          <li>
+            The app isn't signed with an Apple developer certificate yet, so macOS will block the first launch.
+            Clear the quarantine flag once:
+            <div class="code"><pre>xattr -dr com.apple.quarantine "/Applications/Claude Sessions.app"</pre><button class="copy">Copy</button></div>
+          </li>
+          <li>Open it. The first time you click a session, macOS asks whether Claude Sessions may control Terminal. Click <b>Allow</b>; that's how it opens windows.</li>
+        </ol>
+        <p class="small">Needs Claude Code installed (<code>claude</code> on your PATH) and macOS 11 or later. Python 3 ships with macOS's command line tools.</p>
+      </div>
+
+      <div class="card">
+        <h3>Just the CLI (macOS or Linux)</h3>
+        <p>One Python file, no dependencies:</p>
+        <div class="code"><pre>mkdir -p ~/.local/bin
+curl -fsSL https://raw.githubusercontent.com/AryaKesharwani/claude-sessions/main/cs.py -o ~/.local/bin/cs
+chmod +x ~/.local/bin/cs
+cs</pre><button class="copy">Copy</button></div>
+        <p class="small">Make sure <code>~/.local/bin</code> is on your <code>PATH</code>. If <a href="https://github.com/junegunn/fzf">fzf</a> is installed, <code>cs</code> uses it for fuzzy picking.</p>
+      </div>
+
+      <div class="card">
+        <h3>Build the app from source</h3>
+        <div class="code"><pre>git clone https://github.com/AryaKesharwani/claude-sessions
+cd claude-sessions/app
+pnpm install
+pnpm tauri build   # → src-tauri/target/release/bundle/macos/Claude Sessions.app</pre><button class="copy">Copy</button></div>
+        <p class="small">Needs Rust (1.77+) and Node 18+. This is also the way to get an Intel build.</p>
+      </div>
+    </section>
+
+    <section id="cli" class="ref">
+      <h2>CLI reference</h2>
+      <table>
+        <thead><tr><th>Command</th><th>What it does</th></tr></thead>
+        <tbody>
+          <tr><td><code>cs</code></td><td>Interactive picker. Type a number to resume, or words to narrow the list.</td></tr>
+          <tr><td><code>cs ls [words] [-n 25] [--here] [--json]</code></td><td>List sessions newest first. <code>--here</code> limits to the current folder; <code>--json</code> prints everything the index knows.</td></tr>
+          <tr><td><code>cs r &lt;number|id&gt; [--claude-args "…"]</code></td><td>Resume a session by list number or id prefix, in its original folder.</td></tr>
+          <tr><td><code>cs show &lt;number|id&gt; [-n 8]</code></td><td>Print the last few messages you sent in a session.</td></tr>
+          <tr><td><code>cs summary &lt;number|id&gt;</code></td><td>Write and cache a short AI recap using <code>claude -p --model haiku</code>.</td></tr>
+          <tr><td><code>cs pin &lt;number|id&gt;</code></td><td>Pin or unpin a session to the top of <code>cs ls</code>.</td></tr>
+          <tr><td><code>cs backup [-q]</code></td><td>Copy new or changed session files to <code>~/.claude-sessions/archive</code>.</td></tr>
+        </tbody>
+      </table>
+      <p class="small">Tip: to back up automatically, add <code>cs backup -q</code> as a <code>SessionEnd</code> hook in <code>~/.claude/settings.json</code>, or raise <code>cleanupPeriodDays</code> there.</p>
+    </section>
+
+    <section id="settings" class="ref">
+      <h2>Settings</h2>
+      <p>Open with <kbd>⌘</kbd><kbd>,</kbd>, the gear icon, or the menu bar dropdown. Every change saves straight away.</p>
+      <table>
+        <thead><tr><th>Tab</th><th>Setting</th><th>Default</th></tr></thead>
+        <tbody>
+          <tr><td rowspan="4">General</td><td>Open sessions in Terminal, iTerm2 or Ghostty</td><td>Terminal</td></tr>
+          <tr><td>Tile windows after opening</td><td>Off</td></tr>
+          <tr><td>Extra Claude arguments</td><td>None</td></tr>
+          <tr><td>Keep running in the menu bar when the window closes</td><td>On</td></tr>
+          <tr><td rowspan="4">Appearance</td><td>Theme (8 options)</td><td>System</td></tr>
+          <tr><td>Accent colour</td><td>Theme default</td></tr>
+          <tr><td>Text size</td><td>Medium</td></tr>
+          <tr><td>Density</td><td>Comfortable</td></tr>
+          <tr><td rowspan="2">Menu Bar</td><td>Show in menu bar</td><td>On</td></tr>
+          <tr><td>Recent sessions in menu</td><td>10</td></tr>
+          <tr><td rowspan="4">List</td><td>Second line: latest message, first message or AI summary</td><td>Latest message</td></tr>
+          <tr><td>Show time</td><td>On</td></tr>
+          <tr><td>Show archived sessions</td><td>On</td></tr>
+          <tr><td>Show sessions from (all time, today, 7, 30 or 90 days)</td><td>All time</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="ref">
+      <h2>Where things live</h2>
+      <table>
+        <thead><tr><th>Path</th><th>What</th></tr></thead>
+        <tbody>
+          <tr><td><code>~/.claude/projects/*/*.jsonl</code></td><td>Claude Code's own session files (read only)</td></tr>
+          <tr><td><code>~/.claude-sessions/index.json</code></td><td>Cached index, rebuilt whenever a session file changes</td></tr>
+          <tr><td><code>~/.claude-sessions/archive/</code></td><td>Backups made by <code>cs backup</code></td></tr>
+          <tr><td><code>~/.claude-sessions/settings.json</code></td><td>App settings</td></tr>
+          <tr><td><code>~/.claude-sessions/summaries.json</code></td><td>Cached AI recaps</td></tr>
+          <tr><td><code>~/.claude-sessions/pins.json</code></td><td>Pinned sessions (CLI)</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="faq" class="faq">
+      <h2>FAQ</h2>
+      <details>
+        <summary>Does it send my code or conversations anywhere?</summary>
+        <p>No. Listing, searching and opening are all local file reads. The only exception is <code>cs summary</code>, which you run yourself: it sends the messages you typed in that one session (not Claude's replies, not your files) to Claude Haiku through your own <code>claude</code> CLI login, with tools turned off and session saving disabled.</p>
+      </details>
+      <details>
+        <summary>Will it change or break my sessions?</summary>
+        <p>It never writes to Claude Code's session files. Resuming is done by Claude Code itself with <code>claude --resume</code>. The only time it writes into <code>~/.claude/projects</code> is to copy an archived session back so Claude Code can resume it.</p>
+      </details>
+      <details>
+        <summary>Why does macOS ask to let it control Terminal?</summary>
+        <p>Opening a new Terminal or iTerm2 window and running a command in it is done with AppleScript, which macOS gates behind the Automation permission. You can change it any time in System Settings → Privacy &amp; Security → Automation.</p>
+      </details>
+      <details>
+        <summary>Why is the app unsigned?</summary>
+        <p>Signing and notarising needs a paid Apple developer account, which this side project doesn't have yet. The full source is in the repo and the release is built from it; you can also build it yourself in about two minutes.</p>
+      </details>
+      <details>
+        <summary>Does it work on Intel Macs, Linux or Windows?</summary>
+        <p>The download is for Apple Silicon. Intel Macs can build from source. The <code>cs</code> CLI works anywhere Python 3 and Claude Code run. The app's terminal integration is macOS only for now.</p>
+      </details>
+      <details>
+        <summary>A session says "archived". What does that mean?</summary>
+        <p>Claude Code already deleted it after 30 days, but a <code>cs backup</code> copy exists. Opening it restores the file first, then resumes it as usual.</p>
+      </details>
+      <details>
+        <summary>Is this made by Anthropic?</summary>
+        <p>No. It's an independent open-source tool that reads the files Claude Code already writes. Claude and Claude Code are Anthropic's products.</p>
+      </details>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <p>Built by <a href="https://aryakesarwani.tech">Arya Kesarwani</a> · <a href="https://github.com/AryaKesharwani/claude-sessions">Source on GitHub</a> · MIT licence</p>
+    <p class="small">Not affiliated with Anthropic.</p>
+  </footer>
+
+  <script src="site.js"></script>
+</body>
+</html>

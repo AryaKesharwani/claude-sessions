@@ -1,0 +1,111 @@
+/* Themes. Each sets the same tokens; <html data-theme="…"> picks one.
+   "system" follows macOS light/dark. --accent can be overridden from settings. */
+
+:root,
+:root[data-theme="light"] {
+  --bg: #fbfaf8;
+  --panel: #ffffff;
+  --text: #22201c;
+  --muted: #8a847b;
+  --line: #ebe7e0;
+  --hover: #f1eee8;
+  --theme-accent: #c8623f;
+  --on-accent: #ffffff;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="system"] {
+    --bg: #1c1b19;
+    --panel: #242320;
+    --text: #ece8e1;
+    --muted: #8f8980;
+    --line: #2c2a27;
+    --hover: #252421;
+    --theme-accent: #d97757;
+    --on-accent: #1c1b19;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #1c1b19;
+  --panel: #242320;
+  --text: #ece8e1;
+  --muted: #8f8980;
+  --line: #2c2a27;
+  --hover: #252421;
+  --theme-accent: #d97757;
+  --on-accent: #1c1b19;
+  color-scheme: dark;
+}
+
+:root[data-theme="midnight"] {
+  --bg: #0d1117;
+  --panel: #161b22;
+  --text: #e6edf3;
+  --muted: #7d8590;
+  --line: #21262d;
+  --hover: #161b22;
+  --theme-accent: #58a6ff;
+  --on-accent: #0d1117;
+  color-scheme: dark;
+}
+
+:root[data-theme="nord"] {
+  --bg: #2e3440;
+  --panel: #3b4252;
+  --text: #eceff4;
+  --muted: #9aa4b6;
+  --line: #3b4252;
+  --hover: #353c4a;
+  --theme-accent: #88c0d0;
+  --on-accent: #2e3440;
+  color-scheme: dark;
+}
+
+:root[data-theme="rose"] {
+  --bg: #191724;
+  --panel: #1f1d2e;
+  --text: #e0def4;
+  --muted: #908caa;
+  --line: #26233a;
+  --hover: #1f1d2e;
+  --theme-accent: #ebbcba;
+  --on-accent: #191724;
+  color-scheme: dark;
+}
+
+:root[data-theme="solarized"] {
+  --bg: #fdf6e3;
+  --panel: #fffbf0;
+  --text: #073642;
+  --muted: #839496;
+  --line: #eee8d5;
+  --hover: #f5efdc;
+  --theme-accent: #cb4b16;
+  --on-accent: #fdf6e3;
+  color-scheme: light;
+}
+
+:root[data-theme="paper"] {
+  --bg: #ffffff;
+  --panel: #ffffff;
+  --text: #111111;
+  --muted: #8c8c8c;
+  --line: #eeeeee;
+  --hover: #f6f6f6;
+  --theme-accent: #111111;
+  --on-accent: #ffffff;
+  color-scheme: light;
+}
+
+:root { --accent: var(--accent-override, var(--theme-accent)); }
+
+:root[data-size="small"] { --font: 12px; }
+:root[data-size="medium"], :root { --font: 13px; }
+:root[data-size="large"] { --font: 15px; }
+
+:root { --row-pad: 10px; }
+:root[data-density="compact"] { --row-pad: 6px; }
+:root[data-density="spacious"] { --row-pad: 14px; }
