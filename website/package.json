@@ -4,7 +4,8 @@
   "scripts": {
     "build": "bash build.sh",
     "dev": "bash build.sh && wrangler dev",
-    "deploy": "wrangler deploy"
+    "deploy": "wrangler deploy",
+    "feedback": "wrangler d1 execute claude-sessions-feedback --remote --json --command \"SELECT id, created_at, source, country, answers FROM feedback ORDER BY id DESC\""
   },
   "devDependencies": {
     "wrangler": "^4"

@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 2-minute questionnaire (no GitHub needed)
+    url: https://sessions.aryakesarwani.tech/feedback?ref=github
+    about: Tell me how you use Claude Code and what would make this more useful.
+  - name: Questions and ideas
+    url: https://github.com/AryaKesharwani/claude-sessions/discussions
+    about: Ask a question or share how you use it.

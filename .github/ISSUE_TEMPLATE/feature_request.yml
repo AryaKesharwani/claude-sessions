@@ -1,0 +1,34 @@
+name: Feature request
+description: Suggest an idea or an improvement.
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to do?
+      description: The situation or frustration, in your own words. This matters more than the solution.
+      placeholder: "I run 8 sessions across 3 repos and want to reopen all of them in tmux panes after a reboot."
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would help?
+      description: How you imagine it working. Rough is fine.
+  - type: dropdown
+    id: part
+    attributes:
+      label: Where should it live?
+      multiple: true
+      options:
+        - Mac app
+        - Menu bar dropdown
+        - cs CLI
+        - New platform (Linux / Windows)
+        - Not sure
+  - type: checkboxes
+    id: help
+    attributes:
+      label: Want to help build it?
+      options:
+        - label: I'd be up for opening a pull request

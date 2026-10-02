@@ -1,0 +1,66 @@
+name: Bug report
+description: Something doesn't work the way it should.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time! The more of this you fill in, the faster it gets fixed.
+        Please don't paste private session content; titles and error messages are enough.
+  - type: dropdown
+    id: part
+    attributes:
+      label: Which part?
+      options:
+        - Mac app (main window)
+        - Mac app (menu bar dropdown)
+        - Mac app (settings)
+        - cs CLI
+        - Website
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What you did, what you expected, and what happened instead.
+      placeholder: |
+        1. Clicked a session in the list
+        2. Terminal opened
+        3. It printed "claude: command not found"
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: Error output
+      description: Anything printed in the terminal window, or `cs ls -n 3` output if it's a listing problem.
+      render: text
+  - type: input
+    id: version
+    attributes:
+      label: App version
+      description: Claude Sessions → About, or the release you downloaded.
+      placeholder: "0.1.0"
+  - type: input
+    id: claude
+    attributes:
+      label: Claude Code version
+      description: Output of `claude --version`.
+      placeholder: "2.1.287"
+  - type: dropdown
+    id: os
+    attributes:
+      label: OS
+      options:
+        - macOS, Apple Silicon
+        - macOS, Intel
+        - Linux
+        - Windows / WSL
+    validations:
+      required: true
+  - type: input
+    id: terminal
+    attributes:
+      label: Terminal
+      placeholder: "Terminal.app, iTerm2, Ghostty…"

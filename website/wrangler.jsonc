@@ -2,7 +2,20 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "claude-sessions-site",
   "compatibility_date": "2026-10-01",
-  "assets": { "directory": "./dist" },
+  "main": "worker/index.js",
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/*"]
+  },
   "build": { "command": "bash build.sh" },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "claude-sessions-feedback",
+      "database_id": "55b22d56-1493-4309-99d2-b7b69c76ec3f",
+      "migrations_dir": "migrations"
+    }
+  ],
   "routes": [{ "pattern": "sessions.aryakesarwani.tech", "custom_domain": true }]
 }

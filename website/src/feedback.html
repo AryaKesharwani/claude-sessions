@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Feedback: Claude Sessions</title>
+  <meta name="description" content="Help shape Claude Sessions, an open-source tool for finding and reopening Claude Code sessions. Two minutes, no account needed." />
+  <meta property="og:title" content="Help shape Claude Sessions" />
+  <meta property="og:description" content="A 2-minute questionnaire for an open-source Claude Code session manager. No account needed." />
+  <meta property="og:image" content="https://sessions.aryakesarwani.tech/og.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="icon.png" />
+  <link rel="stylesheet" href="site.css" />
+  <link rel="stylesheet" href="feedback.css" />
+</head>
+<body>
+  <header class="nav">
+    <a class="brand" href="/"><img src="icon.png" alt="" width="26" height="26" /> Claude Sessions</a>
+    <nav>
+      <a href="/#demo">Demo</a>
+      <a href="/#install">Install</a>
+      <a class="gh" href="https://github.com/AryaKesharwani/claude-sessions">GitHub</a>
+    </nav>
+  </header>
+
+  <main class="fb">
+    <section class="fb-intro">
+      <p class="eyebrow">Open source · 2 minutes · no account</p>
+      <h1>Help shape Claude Sessions</h1>
+      <p>
+        I'm building this in the open and want it to fit how you actually use Claude Code. Every question is optional.
+        Answers go to me only. Nothing here is shown publicly, and I don't collect your name unless you add it.
+      </p>
+      <p class="small">
+        Found a bug you can reproduce? A <a href="https://github.com/AryaKesharwani/claude-sessions/issues/new/choose">GitHub issue</a> is even better, since others can follow it.
+      </p>
+    </section>
+
+    <form id="form" novalidate>
+      <fieldset>
+        <legend><span>1</span> How many Claude Code sessions do you start on a typical day?</legend>
+        <div class="opts">
+          <label><input type="radio" name="usage" value="1-2" /> 1–2</label>
+          <label><input type="radio" name="usage" value="3-5" /> 3–5</label>
+          <label><input type="radio" name="usage" value="6-10" /> 6–10</label>
+          <label><input type="radio" name="usage" value="10+" /> More than 10</label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend><span>2</span> How do you get back into an old session today?</legend>
+        <div class="opts col">
+          <label><input type="radio" name="finding" value="resume" /> <code>claude --resume</code> in the right folder</label>
+          <label><input type="radio" name="finding" value="continue" /> <code>claude --continue</code> (just the last one)</label>
+          <label><input type="radio" name="finding" value="remember" /> I remember the folder and look there</label>
+          <label><input type="radio" name="finding" value="lose" /> Usually I don't; I start a new one</label>
+          <label><input type="radio" name="finding" value="other" /> Something else</label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend><span>3</span> Have you tried Claude Sessions?</legend>
+        <div class="opts">
+          <label><input type="radio" name="tried" value="app" /> The Mac app</label>
+          <label><input type="radio" name="tried" value="cli" /> The <code>cs</code> CLI</label>
+          <label><input type="radio" name="tried" value="both" /> Both</label>
+          <label><input type="radio" name="tried" value="not-yet" /> Not yet</label>
+        </div>
+      </fieldset>
+
+      <fieldset class="if-tried" hidden>
+        <legend><span>3a</span> Did it work for you?</legend>
+        <div class="opts">
+          <label><input type="radio" name="worked" value="yes" /> Yes</label>
+          <label><input type="radio" name="worked" value="partly" /> Partly</label>
+          <label><input type="radio" name="worked" value="no" /> No</label>
+        </div>
+        <label class="text">
+          What went wrong or felt off? Error messages are gold.
+          <textarea name="broke" rows="3" maxlength="3000" placeholder="e.g. clicking a session opened Terminal but nothing ran"></textarea>
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <legend><span>4</span> What do you run on?</legend>
+        <div class="opts">
+          <label><input type="radio" name="os" value="mac-arm" /> Mac, Apple Silicon</label>
+          <label><input type="radio" name="os" value="mac-intel" /> Mac, Intel</label>
+          <label><input type="radio" name="os" value="linux" /> Linux</label>
+          <label><input type="radio" name="os" value="windows" /> Windows</label>
+          <label><input type="radio" name="os" value="wsl" /> Windows + WSL</label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend><span>5</span> Where do you run Claude Code? <em>Pick any.</em></legend>
+        <div class="opts">
+          <label><input type="checkbox" name="terminal" value="terminal" /> Terminal.app</label>
+          <label><input type="checkbox" name="terminal" value="iterm" /> iTerm2</label>
+          <label><input type="checkbox" name="terminal" value="ghostty" /> Ghostty</label>
+          <label><input type="checkbox" name="terminal" value="warp" /> Warp</label>
+          <label><input type="checkbox" name="terminal" value="kitty" /> kitty</label>
+          <label><input type="checkbox" name="terminal" value="wezterm" /> WezTerm</label>
+          <label><input type="checkbox" name="terminal" value="alacritty" /> Alacritty</label>
+          <label><input type="checkbox" name="terminal" value="vscode" /> VS Code / Cursor terminal</label>
+          <label><input type="checkbox" name="terminal" value="tmux" /> tmux / zellij</label>
+          <label><input type="checkbox" name="terminal" value="other" /> Other</label>
+        </div>
+        <input type="text" name="terminal_other" maxlength="200" placeholder="Other terminal (optional)" class="inline" />
+      </fieldset>
+
+      <fieldset>
+        <legend><span>6</span> What would make it more useful? <em>Pick up to 4.</em></legend>
+        <div class="opts col two" id="wants">
+          <label><input type="checkbox" name="wants" value="linux" /> Linux app</label>
+          <label><input type="checkbox" name="wants" value="windows" /> Windows app</label>
+          <label><input type="checkbox" name="wants" value="intel" /> Intel Mac build</label>
+          <label><input type="checkbox" name="wants" value="signed" /> Signed app (no quarantine step)</label>
+          <label><input type="checkbox" name="wants" value="warp" /> Warp support</label>
+          <label><input type="checkbox" name="wants" value="tmux" /> Open in tmux panes or tabs</label>
+          <label><input type="checkbox" name="wants" value="multi-open" /> Open several sessions at once</label>
+          <label><input type="checkbox" name="wants" value="full-search" /> Search the whole conversation</label>
+          <label><input type="checkbox" name="wants" value="auto-summary" /> Automatic summaries</label>
+          <label><input type="checkbox" name="wants" value="notes-tags" /> Notes and tags on sessions</label>
+          <label><input type="checkbox" name="wants" value="delete-rename" /> Rename or delete sessions</label>
+          <label><input type="checkbox" name="wants" value="export" /> Export a session to Markdown</label>
+          <label><input type="checkbox" name="wants" value="launch-login" /> Launch at login</label>
+          <label><input type="checkbox" name="wants" value="vscode" /> VS Code / Cursor extension</label>
+        </div>
+        <p class="limit" id="wants-limit" hidden>That's 4. Untick one to pick another.</p>
+      </fieldset>
+
+      <fieldset>
+        <legend><span>7</span> If you could change one thing, what would it be?</legend>
+        <label class="text"><textarea name="change" rows="3" maxlength="3000" placeholder="Anything: a missing feature, something confusing, a reason you wouldn't use it"></textarea></label>
+      </fieldset>
+
+      <fieldset>
+        <legend><span>8</span> How likely are you to recommend it to another Claude Code user?</legend>
+        <div class="nps" role="radiogroup" aria-label="0 is not at all likely, 10 is extremely likely">
+          <!-- filled by feedback.js -->
+        </div>
+        <div class="nps-ends"><span>Not likely</span><span>Very likely</span></div>
+      </fieldset>
+
+      <fieldset>
+        <legend><span>9</span> Anything else?</legend>
+        <label class="text"><textarea name="else" rows="3" maxlength="3000"></textarea></label>
+        <label class="text">
+          Want a reply or a heads-up when your request ships? Leave a Reddit username, GitHub handle or email. <em>Optional.</em>
+          <input type="text" name="contact" maxlength="200" autocomplete="off" placeholder="u/you, @you or you@example.com" />
+        </label>
+      </fieldset>
+
+      <!-- Honeypot for bots; hidden from people and screen readers. -->
+      <div class="hp" aria-hidden="true"><label>Website <input type="text" name="website" tabindex="-1" autocomplete="off" /></label></div>
+
+      <div class="submit">
+        <button class="btn primary" type="submit">Send answers</button>
+        <p id="status" role="status" aria-live="polite"></p>
+      </div>
+    </form>
+
+    <section id="thanks" class="thanks" hidden>
+      <h2>Thank you!</h2>
+      <p>I read every answer. If you left a handle and asked for something, I'll let you know when it ships.</p>
+      <p>
+        Want to follow along? <a href="https://github.com/AryaKesharwani/claude-sessions">Star or watch the repo</a>,
+        <a href="https://github.com/AryaKesharwani/claude-sessions/issues/new/choose">open an issue</a>, or
+        <a href="https://github.com/AryaKesharwani/claude-sessions/discussions">join the discussion</a>.
+      </p>
+      <p><a class="btn" href="/">Back to Claude Sessions</a></p>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <p>Built by <a href="https://aryakesarwani.tech">Arya Kesarwani</a> · <a href="https://github.com/AryaKesharwani/claude-sessions">Source on GitHub</a> · MIT licence</p>
+    <p class="small">Not affiliated with Anthropic.</p>
+  </footer>
+  <script src="feedback.js"></script>
+</body>
+</html>

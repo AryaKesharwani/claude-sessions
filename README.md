@@ -205,8 +205,10 @@ cs.py                    the CLI, also bundled into the app
 app/                     Tauri app
   src/                   UI: index.html (list), settings.html, theme.css/js
   src-tauri/src/main.rs  menus, tray, settings, terminal + tiling (AppleScript)
-website/                 sessions.aryakesarwani.tech (Cloudflare Worker, static)
-  src/                   landing page
+website/                 sessions.aryakesarwani.tech (Cloudflare Worker + D1)
+  src/                   landing page and /feedback questionnaire
+  worker/index.js        serves the site; POST /api/feedback stores answers in D1
+  migrations/            D1 schema
   demo-shim/mock.js      fake Tauri API so the real app UI runs in the browser demo
   build.sh               landing page + app/src + mock → dist/
 docs/                    README screenshots
@@ -219,7 +221,10 @@ cd website
 npm install
 npm run dev      # build + wrangler dev
 npm run deploy   # build + deploy to Cloudflare Workers
+npm run feedback # print questionnaire answers (needs access to the D1 database)
 ```
+
+Questionnaire answers are stored in a D1 table with only the answers, a `?ref=` source tag, the visitor's country, and a salted IP hash used for rate limiting (5 per hour).
 
 The demo on the site is the real `app/src` UI. `build.sh` copies it next to `mock.js`, which stands in for `window.__TAURI__` with made-up sessions.
 
@@ -232,14 +237,20 @@ The demo on the site is the real `app/src` UI. `build.sh` copies it next to `moc
 
 ## Roadmap
 
-- Launch at login
-- Signed and notarised builds, plus Intel and universal binaries
-- Open several sessions at once from the menu bar
-- Automatic summaries for new sessions (opt in)
+Tracked as [issues labelled `roadmap`](https://github.com/AryaKesharwani/claude-sessions/issues?q=is%3Aopen+label%3Aroadmap): Linux support, launch at login, more terminals (kitty, WezTerm, Warp, tmux), full-conversation search, and signed universal builds. The [questionnaire](https://sessions.aryakesarwani.tech/feedback?ref=readme) decides the order.
+
+## Feedback
+
+This is an ongoing open-source project, and what gets built next depends on how people actually use it.
+
+- **[2-minute questionnaire](https://sessions.aryakesarwani.tech/feedback?ref=readme)**: no account needed. Tell me how you find old sessions today, what broke, and what you'd want.
+- **[Bug report](https://github.com/AryaKesharwani/claude-sessions/issues/new?template=bug_report.yml)** or **[feature request](https://github.com/AryaKesharwani/claude-sessions/issues/new?template=feature_request.yml)** on GitHub.
+- **[Discussions](https://github.com/AryaKesharwani/claude-sessions/discussions)** for questions and ideas.
+- The **[roadmap issues](https://github.com/AryaKesharwani/claude-sessions/issues?q=is%3Aopen+label%3Aroadmap)** show what's planned; 👍 the ones you care about.
 
 ## Contributing
 
-Issues and pull requests are welcome. The code is small: `cs.py` (~410 lines) and `app/src-tauri/src/main.rs` (~530 lines). Please keep the UI minimal.
+See [CONTRIBUTING.md](CONTRIBUTING.md). Issues and pull requests are welcome. The code is small: `cs.py` (~410 lines) and `app/src-tauri/src/main.rs` (~530 lines). Please keep the UI minimal.
 
 ## Licence
 
