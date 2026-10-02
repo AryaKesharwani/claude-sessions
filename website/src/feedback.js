@@ -83,6 +83,7 @@ form.addEventListener("submit", async (e) => {
     try {
       localStorage.removeItem(DRAFT_KEY);
     } catch {}
+    if (window.op) window.op("track", "feedback_submitted", { source: data.source || "direct", tried: data.tried || "", nps: data.nps || "" });
     form.hidden = true;
     document.querySelector(".fb-intro").hidden = true;
     document.getElementById("thanks").hidden = false;
