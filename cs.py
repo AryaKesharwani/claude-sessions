@@ -308,16 +308,35 @@ def show(s, count):
     print(f"{DIM}resume: cs resume {s['id'][:8]}{RESET}")
 
 
+def _user_prompts(path):
+    """Your typed messages in a session, in order. Reads every line (so the middle of a long session counts) but only
+    JSON-parses the ones that can be a user message; tool output, which is most of a big file, is skipped unparsed."""
+    with open(path, "rb") as f:
+        for line in f:
+            if b'"type":"user"' not in line or b'"tool_result"' in line:
+                continue
+            for rec in _records((line,)):
+                text = _prompt_text(rec)
+                if text:
+                    yield text
+
+
+def _spread(items, n):
+    """Keep at most n items: the first few, the last few, and an even sample of the middle, marking gaps with "…"."""
+    if len(items) <= n:
+        return items
+    head, tail = 5, 10
+    middle = items[head:-tail]
+    k = n - head - tail
+    step = len(middle) / k
+    picked = [middle[int(i * step)] for i in range(k)]
+    return items[:head] + ["…"] + picked + ["…"] + items[-tail:]
+
+
 def summarize(s):
     """Ask a small model for a 2-3 sentence recap of the session and cache it."""
-    prompts = []
-    with open(s["file"], "rb") as f:
-        for rec in _records(f):
-            text = _prompt_text(rec)
-            if text:
-                prompts.append(clip(text, 400))
-    if len(prompts) > 40:
-        prompts = prompts[:10] + ["…"] + prompts[-30:]
+    prompts = [clip(t, 400) for t in _user_prompts(s["file"])]
+    prompts = _spread(prompts, 40)
     claude = shutil.which("claude")
     if not claude:
         sys.exit("cs: `claude` not found on PATH")
